@@ -22,7 +22,7 @@ Identifie ton modèle (il figure dans ton prompt système) et applique son adden
 | **T1 Trivial** | typo, lookup factuel | Réponse directe, zéro cérémonie, pas de score de confiance |
 | **T2 Standard** | modif localisée, bug circonscrit | Comprendre, exécuter, vérifier ; challenger interne rapide |
 | **T3 Complexe** | multi-fichiers, audit, dispatch d'agents, décision d'architecture | Boucle complète (section 2) + référentiel chargé |
-| **T4 Critique** | push, déploiement, publication, action irréversible ou tournée vers l'extérieur, fichier critique (settings, hooks, migrations, .env, définitions d'agents partagées : ADAPTEZ votre liste), livrable client final, contenu confidentiel client | T3 + Quality Gate 7 points intégrale (section 3) |
+| **T4 Critique** | push, déploiement, publication, action irréversible ou tournée vers l'extérieur, fichier critique (settings, hooks, migrations, .env, définitions d'agents partagées : [ADAPTEZ : votre liste de fichiers critiques]), livrable client final, contenu confidentiel client | T3 + Quality Gate 7 points intégrale (section 3) |
 
 **Le cas du commit (préséance)** : (1) push, déploiement ou commit touchant un fichier critique = T4, gate intégrale ; (2) commit local ordinaire = niveau de la tâche qu'il clôt, plafonné à T3, gate allégée (points 2, 4, 6 + greps d'invariants) ; (3) le challenger indépendant est dû par CLÔTURE de chantier ou de vague, jamais par commit unitaire ; (4) signaux contradictoires : le tableau prime, le niveau le plus élevé l'emporte.
 
@@ -73,7 +73,7 @@ Aucun chantier n'est livré sous 0,95 de confiance. Une livraison rapide qui sac
 - **Skills de procédure** (si installées) : brainstorming avant création, plan écrit avant multi-étapes, debugging systématique sur tout bug, vérification avant tout « c'est fait ».
 - **Juges externes** : protocole par rôles, gabarits et grille de contrôle dans `multi-model/PROTOCOLE.md` du dépôt héritage-fable. Jamais de contenu client confidentiel vers un juge cloud.
 
-### 6. Exemples de règles projet (à remplacer par les vôtres)
+### 6. Exemples de règles projet [ADAPTEZ : remplacez ce bloc par vos règles, dont vos marqueurs de confidentialité]
 
 Ce bloc illustre le type de règles métier que ce système attend de trouver dans vos CLAUDE.md ; remplacez-le :
 

@@ -4,8 +4,8 @@
 > agents, written by Claude Fable 5 as a self-decomposition of its own process, then
 > generalized for public use. It ships a full reference document (12 modules plus per-model
 > addenda for Opus, Sonnet and future models), a condensed core for your CLAUDE.md, mechanical
-> guardrails (SessionStart hook, lint, background runner), a zero-token session documentation
-> module (hooks plus a scribe agent), and a multi-model routing protocol. All content is in
+> guardrails (SessionStart hook, lint, background runner), a session documentation module
+> (zero-token capture hooks plus a scribe agent), and a multi-model routing protocol. All content is in
 > French. Hooks require Windows plus PowerShell 7; the Node.js scribe module is cross-platform.
 
 ## Ce que c'est
@@ -45,11 +45,14 @@ sans m'avoir montré le diff exact et obtenu mon accord.
    mes réponses. Montre le diff avant d'écrire.
 4. Installe le hook SessionStart (INSTALL.md étape 3) dans ~/.claude/settings.json en
    FUSIONNANT avec mes hooks existants. Montre le diff avant d'écrire. Pose la copie portable
-   du référentiel (étape 2).
+   du référentiel (étape 2). Sans pwsh (macOS/Linux), saute cette étape et signale-le au
+   rapport.
 5. Câble le module scribe sur le projet pilote choisi (INSTALL.md étape 5) : hooks du projet,
    agent scribe copié dans ~/.claude/agents/, variables d'environnement utiles. Montre chaque
    diff avant d'écrire.
-6. Vérifie : exécute pwsh -NoProfile -File hooks/fable-lint.ps1 (attendu : VERT) et
+6. Vérifie : exécute pwsh -NoProfile -File hooks/fable-lint.ps1 (attendu : VERT ; si noyau
+   par projet, ajuste d'abord la variable $NOYAU en tête de hooks/fable-lint.ps1, sinon le
+   lint sort ROUGE « Noyau absent » ; sans pwsh, saute le lint et signale-le) et
    node scribe/test-session-scribe.mjs (attendu : TOUS LES TESTS PASSENT). Colle les sorties.
 7. Rapporte étape par étape : fait / preuve observée / ce qui reste à ma charge. Si un point
    échoue, diagnostique la cause racine avant toute nouvelle tentative.
@@ -66,21 +69,29 @@ discipline du modèle (hooks, lint, deny sélectif, redaction de secrets).
 
 **Il ne fait pas** : de magie. La thèse a été MESURÉE : sur un benchmark held-out de tâches
 courtes (2026-07-08), la lecture du référentiel complet a donné un delta NUL par rapport au
-noyau condensé plus la mécanisation. La valeur démontrée vit dans le noyau et les garde-fous
-mécaniques ; le référentiel complet vise les chantiers longs (marathons multi-sessions), hors
-de portée de ce banc. Le référentiel inclut son propre protocole de péremption : si un modèle
+noyau condensé plus la mécanisation. Ce que ce banc établit : aucun gain incrémental du
+référentiel complet sur tâches courtes. La valeur du noyau et des garde-fous mécaniques, elle,
+n'a pas eu de condition contrôle « sans système » : elle relève de l'usage éprouvé, pas d'une
+mesure. Le référentiel complet vise les chantiers longs (marathons multi-sessions), hors de
+portée de ce banc. Le référentiel inclut son propre protocole de péremption : si un modèle
 futur le rend inutile, il prévoit son retrait.
 
 **Prérequis** : les hooks PowerShell exigent Windows et `pwsh` (portage bash bienvenu) ; les
-scripts Node du module scribe sont cross-platform ; le tout suppose Claude Code.
+scripts Node du module scribe sont cross-platform ; le tout suppose Claude Code. Testé sur
+Claude Code 2.1.x : le module scribe exige le tool de dispatch « Agent » et les événements de
+hooks SessionStart, PostToolUse, SubagentStop, PreCompact, SessionEnd et PreToolUse ; sur une
+version où le dispatch s'appelle « Task », adaptez le matcher d'INSTALL.md étape 5 et les deux
+tests d'égalité correspondants dans `scribe/`. Bonnes pratiques : installez depuis un commit ou
+un tag figé et relisez les scripts avant de câbler un hook (c'est du code qui s'exécute à
+chaque session). Projet indépendant, non affilié à Anthropic.
 
 ## FAQ courte
 
 **Pourquoi en français ?** C'est la langue de travail d'origine du système ; les invariants de
 langue (accents, typographie) font partie de ce qu'il vérifie. Adaptez-les à votre langue.
 
-**Faut-il tout installer ?** Non. Le noyau seul (étape 1 d'INSTALL.md) porte l'essentiel de la
-valeur mesurée. Hooks, lint et scribe s'ajoutent par couches indépendantes.
+**Faut-il tout installer ?** Non. Le noyau seul (étape 1 d'INSTALL.md) suffit pour démarrer,
+au meilleur rapport valeur/coût. Hooks, lint et scribe s'ajoutent par couches indépendantes.
 
 **Est-ce spécifique à Opus et Sonnet ?** Les addenda le sont (c'est leur raison d'être : ils
 corrigent les modes d'échec observés de chaque gamme). Les 12 modules sont communs, et

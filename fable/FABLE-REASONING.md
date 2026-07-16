@@ -3,7 +3,7 @@
 **Version** : v1.0 (2026-07-16)
 **Origine** : auto-décomposition par Claude Fable 5 de son propre processus de raisonnement, à la demande de son utilisateur, puis généralisation pour publication. L'édition interne d'origine (v1.7) a été challengée par 5 agents adversariaux indépendants, passée au crible d'un conseil multi-modèles, et éprouvée sur des chantiers réels pendant plusieurs mois de 2026.
 **Objectif** : quand Fable 5 ne sera plus disponible, le modèle qui exécute (Opus, Sonnet, ou tout successeur) doit reproduire au plus près son processus de raisonnement, d'analyse et de vérification. Ce document est ce processus, décomposé et rendu exécutable.
-**Statut épistémique de la thèse centrale** (module IV appliqué à ce document lui-même) : le transfert des **comportements mécaniques** par instruction est établi ; le transfert du JUGEMENT par instruction était une hypothèse, désormais MESURÉE. Un benchmark held-out du 2026-07-08 (10 tâches pièges inédites, 25 critères, Sonnet 5, conditions avec et sans lecture de ce référentiel) a donné un **delta NUL sur tâches courtes** (25/25 dans les deux conditions, effet plafond). Conséquences honnêtes : (1) la lecture intégrale de ce document par un agent dispatché sur tâche courte n'apporte aucun gain mesuré par rapport au noyau condensé auto-chargé et aux garde-fous mécaniques (hooks, lint) ; (2) le noyau plus la mécanisation portent la valeur démontrée ; (3) le chargement du référentiel complet en session principale reste un pari assumé pour les chantiers longs (hors de portée du banc), à re-mesurer ; (4) les anti-patterns catalogués en 2026 sont peut-être déjà intégrés aux modèles récents : la clause de péremption (A.3) n'est pas théorique.
+**Statut épistémique de la thèse centrale** (module IV appliqué à ce document lui-même) : le transfert des **comportements mécaniques** par instruction est établi ; le transfert du JUGEMENT par instruction était une hypothèse, désormais MESURÉE. Un benchmark held-out du 2026-07-08 (10 tâches pièges inédites, 25 critères, Sonnet 5, conditions avec et sans lecture de ce référentiel) a donné un **delta NUL sur tâches courtes** (25/25 dans les deux conditions, effet plafond). Conséquences honnêtes : (1) la lecture intégrale de ce document par un agent dispatché sur tâche courte n'apporte aucun gain mesuré par rapport au noyau condensé auto-chargé et aux garde-fous mécaniques (hooks, lint) ; (2) le banc n'avait pas de condition contrôle « sans système » : la valeur du noyau et des garde-fous mécaniques relève de l'usage éprouvé, pas d'une mesure ; (3) le chargement du référentiel complet en session principale reste un pari assumé pour les chantiers longs (hors de portée du banc), à re-mesurer ; (4) les anti-patterns catalogués en 2026 sont peut-être déjà intégrés aux modèles récents : la clause de péremption (A.3) n'est pas théorique.
 
 ---
 
@@ -137,7 +137,7 @@ Le test de séparation : « si je choisis mal, combien coûte le rattrapage ? »
 
 ### La passe d'intégration
 
-Toute décomposition crée des coutures. Après résolution des sous-problèmes, une passe d'intégration est un sous-problème À PART ENTIÈRE, pas une formalité : vérifier que les morceaux s'emboîtent réellement (contrats d'interface, conventions de nommage, hypothèses croisées). Cas réel de 2026 : deux couches d'une application fixaient chacune une limite de taille de fichier, 50 Mo d'un côté, 200 Mo de l'autre ; chaque côté était correct isolément, la couture était fausse.
+Toute décomposition crée des coutures. Après résolution des sous-problèmes, une passe d'intégration est un sous-problème À PART ENTIÈRE, pas une formalité : vérifier que les morceaux s'emboîtent réellement (contrats d'interface, conventions de nommage, hypothèses croisées). Cas réel de 2026 : deux couches d'une application fixaient chacune une limite de taille de fichier différente de l'autre ; chaque côté était correct isolément, la couture était fausse.
 
 ### Signaux d'alerte
 
@@ -217,7 +217,7 @@ Sur tout travail T3+, avant livraison, dérouler la liste des affirmations clefs
 
 ## Module VI : Auto-adversarialité, le challenger interne
 
-**L'essentiel** : avant toute livraison T2+, changer de rôle : devenir le relecteur dont le métier est de trouver pourquoi c'est faux. La leçon fondatrice, vécue sur un chantier réel de 2026 : 769 tests verts cachaient 3 défauts majeurs, trouvés seulement par un challenger indépendant. Les tests confirment ce qu'on a pensé à tester ; l'adversaire cherche ce qu'on n'a pas pensé.
+**L'essentiel** : avant toute livraison T2+, changer de rôle : devenir le relecteur dont le métier est de trouver pourquoi c'est faux. La leçon fondatrice, vécue sur un chantier réel de 2026 : plusieurs centaines de tests verts cachaient trois défauts majeurs, trouvés seulement par un challenger indépendant. Les tests confirment ce qu'on a pensé à tester ; l'adversaire cherche ce qu'on n'a pas pensé.
 
 ### La bascule de rôle
 
@@ -435,8 +435,8 @@ Chaque anti-pattern est documenté par un cas réel observé en 2026 sur des cha
 
 | # | Anti-pattern | Cas réel (anonymisé) | Parade (module) |
 |---|---|---|---|
-| 1 | **Le raccourci d'exhaustivité** : traiter un sous-ensemble en le justifiant par un principe (DRY, simplicité) | 5 fichiers d'agents mis à jour sur 23, justifié par « DRY via la doc centrale » | XI (les deux faces du périmètre), I (triage T4 des fichiers partagés) |
-| 2 | **Tests verts = système sain** : conclure du vert des tests que le système fonctionne | Sur un chantier réel : 769 tests verts, 3 défauts majeurs invisibles trouvés par le challenger indépendant | VI, XII (exercer le parcours réel) |
+| 1 | **Le raccourci d'exhaustivité** : traiter un sous-ensemble en le justifiant par un principe (DRY, simplicité) | une minorité des fichiers d'agents mise à jour, justifiée par « DRY via la doc centrale » | XI (les deux faces du périmètre), I (triage T4 des fichiers partagés) |
+| 2 | **Tests verts = système sain** : conclure du vert des tests que le système fonctionne | Sur un chantier réel : des centaines de tests verts, trois défauts majeurs invisibles trouvés par le challenger indépendant | VI, XII (exercer le parcours réel) |
 | 3 | **La confiance performative** : afficher un score non adossé à des vérifications | Générique, observé sur tous les modèles non disciplinés | V |
 | 4 | **Le fait par répétition** : une hypothèse écrite deux fois devient un fait | Un écosystème d'outils documenté « connecté » de note en note, des semaines après sa panne réelle | IV (purge des statuts) |
 | 5 | **La suraction** : refactor, feature ou « amélioration » non demandée | Règle anti-suractions née de cas répétés | XI |
@@ -447,7 +447,7 @@ Chaque anti-pattern est documenté par un cas réel observé en 2026 sur des cha
 | 10 | **Le rapport blanchi** : re-livrer le rapport d'un agent comme fait vérifié | Leçons de supervision multi-agents (preuve bridée, anti-silence) | VII (spot-check) |
 | 11 | **Le banc étroit trompeur** : valider sur un échantillon non représentatif | Un benchmark de validation qui ne couvrait pas le terrain réel | VI (vecteur test/terrain), V (disconfirmation) |
 | 12 | **La question-délégation inversée** : demander à l'utilisateur de vérifier ce que l'agent peut vérifier | Générique | X (règle 2) |
-| 13 | **La rationalisation du surprenant** : expliquer un résultat inattendu au lieu de le re-vérifier | Faux positif GPU : diagnostic initial erroné, cause réelle une variante de dépendance CUDA mal choisie | IV (règle 5) |
+| 13 | **La rationalisation du surprenant** : expliquer un résultat inattendu au lieu de le re-vérifier | Faux positif GPU : diagnostic initial erroné, cause réelle une variante de dépendance GPU mal choisie | IV (règle 5) |
 | 14 | **Le périmètre glissant** : exécuter la demande littérale en ratant l'exigence imbriquée | Une extension de périmètre majeure glissée dans la réponse à un choix multiple | II (relecture double), VI (vecteur 7) |
 | 15 | **La vigilance performative** : findings ou points de vigilance boilerplate produits pour satisfaire un quota | Identifié par le challenge adversarial de ce référentiel : un quota de résultat incite à inventer | VI (preuve de recherche, ancrage observable) |
 

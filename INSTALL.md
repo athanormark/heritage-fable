@@ -1,17 +1,19 @@
 # INSTALL : installation manuelle pas à pas
 
 > Alternative au prompt d'appropriation du README (qui fait faire ces étapes par votre agent).
-> Prérequis : Claude Code ; PowerShell 7+ (`pwsh`) pour les hooks Fable (Windows) ; Node.js 18+
-> pour le module scribe (cross-platform). Dans tout ce qui suit, `<REPO>` désigne le chemin
-> absolu où vous avez cloné ce dépôt.
+> Prérequis : Claude Code (testé sur 2.1.x : tool de dispatch « Agent », événements de hooks
+> SessionStart, PostToolUse, SubagentStop, PreCompact, SessionEnd, PreToolUse) ; PowerShell 7+
+> (`pwsh`) pour les hooks Fable (Windows) ; Node.js 18+ pour le module scribe (cross-platform).
+> Dans tout ce qui suit, `<REPO>` désigne le chemin absolu où vous avez cloné ce dépôt.
 
 ## Étape 1 : le noyau (indispensable, 5 minutes)
 
 1. Ouvrez `<REPO>/fable/NOYAU.md`.
 2. Collez son contenu dans votre `~/.claude/CLAUDE.md` (toutes sessions) ou dans le
    `CLAUDE.md` d'un projet (ce projet seul).
-3. Remplacez les deux blocs `[ADAPTEZ : ...]` : le chemin du référentiel, et votre liste de
-   fichiers critiques. Remplacez la section 6 (exemples de règles projet) par vos règles.
+3. Remplacez les trois blocs `[ADAPTEZ : ...]` : le chemin du référentiel, votre liste de
+   fichiers critiques, et la section 6 (exemples de règles projet, dont vos marqueurs de
+   confidentialité).
 
 Le noyau seul suffit pour l'essentiel de la valeur mesurée. Les étapes suivantes ajoutent le
 rappel mécanique, le lint et la documentation vivante.
@@ -60,6 +62,10 @@ Attendu : `FABLE-LINT : VERT`. Le lint vérifie : existence et synchronisation (
 copies du référentiel, version citée dans le noyau, invariants de forme, hook déclaré et
 script présent sur disque.
 
+Si vous avez collé le noyau dans le `CLAUDE.md` d'un projet (et non `~/.claude/CLAUDE.md`),
+ajustez d'abord la variable `$NOYAU` en tête de `hooks/fable-lint.ps1` : sans cela, le lint
+sort ROUGE (« Noyau absent »).
+
 ## Étape 5 : le module scribe sur un projet pilote (facultatif)
 
 Choisissez UN projet pilote. Dans `<projet>/.claude/settings.json` (ou `settings.local.json`) :
@@ -88,6 +94,11 @@ Choisissez UN projet pilote. Dans `<projet>/.claude/settings.json` (ou `settings
   }
 }
 ```
+
+Exemple POSIX (macOS/Linux) : mêmes événements, commande
+`node "/chemin/vers/heritage-fable/scribe/scribe-capture.js"`. Note : la normalisation interne
+des chemins ignore la casse (conçue pour Windows) ; sur un système de fichiers sensible à la
+casse, gardez une casse cohérente dans vos configurations.
 
 Installez l'agent scribe : copiez `<REPO>/agents/scribe.md` vers `~/.claude/agents/scribe.md`.
 
@@ -123,5 +134,8 @@ grep-refus de confidentialité, journal d'audit), et référencez-le depuis vos 
 ## Désinstallation
 
 Retirez les blocs de hooks de vos settings, supprimez le bloc noyau de votre CLAUDE.md,
-supprimez `~/.claude/fable-lint-state.json` et les dossiers `.claude/scribe/` des projets
-pilotes. Kill switch immédiat sans désinstaller : `SCRIBE_DISABLE=1`.
+supprimez `~/.claude/fable-lint-state.json`, la copie portable
+`~/.claude/methodology/FABLE-REASONING.md`, l'agent `~/.claude/agents/scribe.md`, les dossiers
+`.claude/scribe/` des projets pilotes, le sas de candidats leçons si vous l'aviez configuré
+(`SCRIBE_SAS_DIR`) et les fichiers temporaires `claude-scribe-*` du dossier temp système.
+Kill switch immédiat sans désinstaller : `SCRIBE_DISABLE=1`.

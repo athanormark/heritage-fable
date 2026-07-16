@@ -82,7 +82,7 @@ try {
     if ($needRun -and (Test-Path $LINT_RUNNER)) {
         # Chaîne d'arguments avec le chemin QUOTÉ : Start-Process ne quote pas
         # les éléments d'un tableau ArgumentList, un chemin avec espaces serait
-        # tronqué (bug attrapé par le test du runner détaché).
+        # tronqué (bug réel attrapé par le harnais interne d'origine).
         $runnerArgs = '-NoProfile -WindowStyle Hidden -File "' + $LINT_RUNNER + '"'
         Start-Process -FilePath 'pwsh' -ArgumentList $runnerArgs -WindowStyle Hidden | Out-Null
     }
