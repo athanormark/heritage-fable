@@ -1,7 +1,8 @@
 # INSTALL : installation manuelle pas à pas
 
 > Alternative au prompt d'appropriation du README (qui fait faire ces étapes par votre agent).
-> Prérequis : Claude Code (testé sur 2.1.x : tool de dispatch « Agent », événements de hooks
+> Prérequis : Claude Code (testé sur 2.1.x : tool de dispatch d'agent « Agent » ou son alias
+> « Task », acceptés tous deux par les scripts de `scribe/` ; événements de hooks
 > SessionStart, PostToolUse, SubagentStop, PreCompact, SessionEnd, PreToolUse) ; PowerShell 7+
 > (`pwsh`) pour les hooks Fable (Windows) ; Node.js 18+ pour le module scribe (cross-platform).
 > Dans tout ce qui suit, `<REPO>` désigne le chemin absolu où vous avez cloné ce dépôt.
@@ -77,7 +78,7 @@ Choisissez UN projet pilote. Dans `<projet>/.claude/settings.json` (ou `settings
       { "hooks": [ { "type": "command", "command": "node \"<REPO>\\scribe\\scribe-capture.js\"" } ] }
     ],
     "PostToolUse": [
-      { "matcher": "Agent", "hooks": [ { "type": "command", "command": "node \"<REPO>\\scribe\\scribe-capture.js\"" } ] }
+      { "matcher": "Agent|Task", "hooks": [ { "type": "command", "command": "node \"<REPO>\\scribe\\scribe-capture.js\"" } ] }
     ],
     "SubagentStop": [
       { "hooks": [ { "type": "command", "command": "node \"<REPO>\\scribe\\scribe-capture.js\"" } ] }

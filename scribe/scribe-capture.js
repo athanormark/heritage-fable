@@ -9,7 +9,8 @@
  *   SessionStart -> journal session_start + injections additionalContext
  *                   (réamorçage post-compaction, pointeur de reprise,
  *                   scribe dû, compteur du sas de leçons, témoin de vie)
- *   PostToolUse  -> tool_name=Agent UNIQUEMENT : événement agent_dispatch
+ *   PostToolUse  -> tool_name=Agent ou Task (alias du tool de dispatch selon
+ *                   la version de Claude Code) UNIQUEMENT : agent_dispatch
  *   SubagentStop -> événement subagent_stop + extraction de candidats leçons
  *   PreCompact   -> journal pre_compact + snapshot déterministe
  *   SessionEnd   -> événement de clôture
@@ -295,11 +296,12 @@ function lifeCheck(state, notes) {
 }
 
 // ---------------------------------------------------------------------------
-// PostToolUse : dispatch d'agent (tool_name=Agent UNIQUEMENT)
+// PostToolUse : dispatch d'agent (tool_name=Agent, ou son alias Task selon la
+// version de Claude Code, UNIQUEMENT)
 // ---------------------------------------------------------------------------
 
 function onPostToolUse(input) {
-  if (input.tool_name !== "Agent") return;
+  if (input.tool_name !== "Agent" && input.tool_name !== "Task") return;
   const resp = input.tool_response && typeof input.tool_response === "object" ? input.tool_response : {};
   const ti = input.tool_input && typeof input.tool_input === "object" ? input.tool_input : {};
   const agentType =

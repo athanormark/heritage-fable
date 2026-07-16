@@ -173,7 +173,9 @@ function classifyTool(projectDir, input) {
   const name = typeof input.tool_name === "string" ? input.tool_name : "";
   const ti = input.tool_input && typeof input.tool_input === "object" ? input.tool_input : {};
   if (ALWAYS_ALLOWED.indexOf(name) !== -1) return { allowed: true };
-  if (name === "Agent") {
+  // "Task" est l'alias du tool de dispatch d'agent selon la version de
+  // Claude Code : même traitement que "Agent".
+  if (name === "Agent" || name === "Task") {
     if (ti.subagent_type === SCRIBE_AGENT) return { allowed: true };
     return { allowed: false };
   }

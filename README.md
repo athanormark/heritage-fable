@@ -78,12 +78,13 @@ futur le rend inutile, il prévoit son retrait.
 
 **Prérequis** : les hooks PowerShell exigent Windows et `pwsh` (portage bash bienvenu) ; les
 scripts Node du module scribe sont cross-platform ; le tout suppose Claude Code. Testé sur
-Claude Code 2.1.x : le module scribe exige le tool de dispatch « Agent » et les événements de
-hooks SessionStart, PostToolUse, SubagentStop, PreCompact, SessionEnd et PreToolUse ; sur une
-version où le dispatch s'appelle « Task », adaptez le matcher d'INSTALL.md étape 5 et les deux
-tests d'égalité correspondants dans `scribe/`. Bonnes pratiques : installez depuis un commit ou
-un tag figé et relisez les scripts avant de câbler un hook (c'est du code qui s'exécute à
-chaque session). Projet indépendant, non affilié à Anthropic.
+Claude Code 2.1.x : le module scribe exige le tool de dispatch d'agent (« Agent », ou son
+alias « Task » sur d'autres versions : les scripts de `scribe/` acceptent les deux depuis la
+v1.1.0, et le matcher d'INSTALL.md étape 5 couvre les deux) et les événements de hooks
+SessionStart, PostToolUse, SubagentStop, PreCompact, SessionEnd et PreToolUse. Bonnes
+pratiques : installez depuis un commit ou un tag figé et relisez les scripts avant de câbler
+un hook (c'est du code qui s'exécute à chaque session) ; le modèle de menace détaillé est dans
+`SECURITY.md`. Projet indépendant, non affilié à Anthropic.
 
 ## FAQ courte
 
