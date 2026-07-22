@@ -26,6 +26,10 @@ qui était propre à son écosystème d'origine :
   harnais de 23 tests.
 - `templates/`, `agents/scribe.md`, `multi-model/PROTOCOLE.md` : les formats canoniques,
   l'agent scribe, le protocole de routage par rôles et de contrôle des juges externes.
+- `skills/` : des skills de méthode et de gouvernance cohérentes avec ce système (chefferie de
+  projet amont, evals, couverture de tests, preuve TDD, audit de production, budget de contexte,
+  juge externe, gouvernance de l'arsenal). Installation et skills externes recommandées :
+  `INSTALL-SKILLS.md`.
 
 ## LE PROMPT d'appropriation
 
@@ -59,6 +63,20 @@ sans m'avoir montré le diff exact et obtenu mon accord.
 ```
 
 Installation manuelle sans agent : `INSTALL.md`.
+
+## Les skills (méthode et gouvernance)
+
+Le dossier `skills/` ajoute des skills cohérentes avec le système de raisonnement, toutes de
+méthode ou de gouvernance (pas de métier) : chefferie de projet amont (`clarify`, `prd`,
+`req-checklist`), qualité et fiabilité (`eval-harness`, `test-coverage`, `tdd-evidence-workflow`,
+`output-evaluator`, `production-audit`), maîtrise du contexte (`context-budget`), juge externe
+(`codex-delegate`, compagnon de `multi-model/PROTOCOLE.md`), et gouvernance de l'arsenal
+(`skill-stocktake`, `skill-comply`, `rules-distill`).
+
+Un prompt d'appropriation « tout d'un coup » installe les skills maison chez vous ET recense les
+skills externes recommandées (que ce dépôt ne redistribue pas, licences tierces), avec leurs
+commandes officielles et le câblage aux agents : `INSTALL-SKILLS.md`. Il est cadré T4, dans le
+même esprit que le prompt ci-dessus (diffs montrés avant écriture, preuve par étape).
 
 ## Ce que ce système fait, et ne fait pas
 
