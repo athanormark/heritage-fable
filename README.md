@@ -123,3 +123,7 @@ s'éteint avec `SCRIBE_DISABLE=1`. Lisez `scribe/journal-lib.js` : tout est insp
 ## Licence
 
 MIT (voir `LICENSE`).
+
+## Auteur
+
+Athanor Savouillan, [Atelia Conseil](https://atelia-conseil.com). Projet indépendant, publié sous licence MIT.
