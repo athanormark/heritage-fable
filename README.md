@@ -1,5 +1,7 @@
 # Héritage Fable 5 : un système de raisonnement pour vos agents Claude Code
 
+> Un système de raisonnement et de documentation vivante pour agents Claude Code : référentiel, noyau condensé, garde-fous mécaniques et skills de méthode.
+
 > **English summary.** This repository packages a complete reasoning system for Claude Code
 > agents, written by Claude Fable 5 as a self-decomposition of its own process, then
 > generalized for public use. It ships a full reference document (12 modules plus per-model
@@ -8,12 +10,26 @@
 > (zero-token capture hooks plus a scribe agent), and a multi-model routing protocol. All content is in
 > French. Hooks require Windows plus PowerShell 7; the Node.js scribe module is cross-platform.
 
-## Ce que c'est
+## Contexte et rôle
 
 Quand Fable 5 ne sera plus disponible, le modèle qui exécute (Opus, Sonnet, ou un successeur)
 doit pouvoir reproduire au plus près son processus de raisonnement, d'analyse et de
 vérification. Ce dépôt est ce processus, décomposé, rendu exécutable, et débarrassé de tout ce
-qui était propre à son écosystème d'origine :
+qui était propre à son écosystème d'origine.
+
+Dépôt publié et maintenu par Athanor Savouillan. Il s'adresse à qui pilote des agents Claude Code sur des chantiers longs et veut une méthode écrite, vérifiable et réutilisable.
+
+---
+
+## Origine du projet
+
+Ce projet est né d'une anticipation de son auteur : le modèle Fable pourrait être retiré par Anthropic. Il s'agissait alors de préserver une méthode de raisonnement (triage, statuts épistémiques, confiance calibrée, passe adversariale avant livraison) sous une forme transposable à d'autres modèles, Opus et Sonnet aujourd'hui, un successeur demain.
+
+Cette anticipation est une hypothèse de travail de l'auteur, pas une information annoncée par Anthropic. Le dépôt reste utile quel que soit le sort de ce modèle, puisque la méthode ne dépend pas de lui.
+
+---
+
+## Fonctionnalités
 
 - `fable/FABLE-REASONING.md` : le référentiel complet (triage T1-T4, épistémologie
   su/inféré/supposé, confiance calibrée, challenger interne à 8 vecteurs, Quality Gate 7
@@ -31,7 +47,48 @@ qui était propre à son écosystème d'origine :
   juge externe, gouvernance de l'arsenal). Installation et skills externes recommandées :
   `INSTALL-SKILLS.md`.
 
-## LE PROMPT d'appropriation
+Le dossier `skills/` ajoute des skills cohérentes avec le système de raisonnement, toutes de
+méthode ou de gouvernance (pas de métier) : chefferie de projet amont (`clarify`, `prd`,
+`req-checklist`), qualité et fiabilité (`eval-harness`, `test-coverage`, `tdd-evidence-workflow`,
+`output-evaluator`, `production-audit`), maîtrise du contexte (`context-budget`), juge externe
+(`codex-delegate`, compagnon de `multi-model/PROTOCOLE.md`), et gouvernance de l'arsenal
+(`skill-stocktake`, `skill-comply`, `rules-distill`).
+
+Un prompt d'appropriation « tout d'un coup » installe les skills maison chez vous ET recense les
+skills externes recommandées (que ce dépôt ne redistribue pas, licences tierces), avec leurs
+commandes officielles et le câblage aux agents : `INSTALL-SKILLS.md`. Il est cadré T4, dans le
+même esprit que le prompt d'appropriation plus bas (diffs montrés avant écriture, preuve par étape).
+
+---
+
+## Stack
+
+- Documentation et méthode : Markdown (référentiel, noyau, templates, skills).
+- Garde-fous mécaniques : PowerShell 7 (`pwsh`) sous Windows pour les hooks `hooks/`.
+- Module scribe : Node.js 18+, multiplateforme (`scribe/`).
+- Environnement cible : Claude Code (hooks, agents, skills).
+
+---
+
+## Résultats
+
+- 12 modules communs dans le référentiel `fable/FABLE-REASONING.md`, avec des addenda par modèle et 15 anti-patterns issus de chantiers réels de 2026.
+- 13 skills de méthode et de gouvernance dans `skills/`.
+- Un harnais de 23 tests pour le module scribe (`scribe/test-session-scribe.mjs`).
+- Mesure datée du 2026-07-08 sur un benchmark held-out de tâches courtes : delta nul entre la lecture du référentiel complet et le noyau condensé plus la mécanisation. Détail dans « Portée et limites ».
+
+---
+
+## Lancer le projet
+
+Installation manuelle sans agent : `INSTALL.md`. Installation des skills : `INSTALL-SKILLS.md`. Vérifications (prérequis : `pwsh` pour le lint, Node.js pour le scribe) :
+
+```bash
+pwsh -NoProfile -File hooks/fable-lint.ps1
+node scribe/test-session-scribe.mjs
+```
+
+Installation guidée par l'agent, en une session Claude Code ouverte à la racine du dépôt cloné :
 
 Clonez ce dépôt, ouvrez une session Claude Code à sa racine, et collez ceci :
 
@@ -64,21 +121,9 @@ sans m'avoir montré le diff exact et obtenu mon accord.
 
 Installation manuelle sans agent : `INSTALL.md`.
 
-## Les skills (méthode et gouvernance)
+---
 
-Le dossier `skills/` ajoute des skills cohérentes avec le système de raisonnement, toutes de
-méthode ou de gouvernance (pas de métier) : chefferie de projet amont (`clarify`, `prd`,
-`req-checklist`), qualité et fiabilité (`eval-harness`, `test-coverage`, `tdd-evidence-workflow`,
-`output-evaluator`, `production-audit`), maîtrise du contexte (`context-budget`), juge externe
-(`codex-delegate`, compagnon de `multi-model/PROTOCOLE.md`), et gouvernance de l'arsenal
-(`skill-stocktake`, `skill-comply`, `rules-distill`).
-
-Un prompt d'appropriation « tout d'un coup » installe les skills maison chez vous ET recense les
-skills externes recommandées (que ce dépôt ne redistribue pas, licences tierces), avec leurs
-commandes officielles et le câblage aux agents : `INSTALL-SKILLS.md`. Il est cadré T4, dans le
-même esprit que le prompt ci-dessus (diffs montrés avant écriture, preuve par étape).
-
-## Ce que ce système fait, et ne fait pas
+## Portée et limites
 
 **Il fait** : un raisonnement discipliné et vérifiable (statuts épistémiques, confiance
 adossée à des vérifications nommées, passe adversariale avant livraison), une documentation de
@@ -104,6 +149,8 @@ pratiques : installez depuis un commit ou un tag figé et relisez les scripts av
 un hook (c'est du code qui s'exécute à chaque session) ; le modèle de menace détaillé est dans
 `SECURITY.md`. Projet indépendant, non affilié à Anthropic.
 
+---
+
 ## FAQ courte
 
 **Pourquoi en français ?** C'est la langue de travail d'origine du système ; les invariants de
@@ -120,10 +167,16 @@ l'annexe A.3 décrit l'intégration d'un modèle futur.
 écriture, hache les contenus en mode racine, gitignore ses dossiers par construction, et
 s'éteint avec `SCRIBE_DISABLE=1`. Lisez `scribe/journal-lib.js` : tout est inspectable.
 
+---
+
 ## Licence
 
 MIT (voir `LICENSE`).
 
+---
+
 ## Auteur
 
-Athanor Savouillan, [Atelia Conseil](https://atelia-conseil.com). Projet indépendant, publié sous licence MIT.
+Athanor Savouillan · [Réalisations](https://atelia-conseil.com/realisations/) · [Atelia Conseil](https://atelia-conseil.com) · [GitHub](https://github.com/athanormark)
+
+Projet indépendant, publié sous licence MIT.
